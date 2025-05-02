@@ -108,14 +108,27 @@ function displayCurrentEntry() {
     }
 }
 
-// Mettre à jour l'indicateur de page
+// Mettre à jour l'indicateur de page et gérer la visibilité des flèches
 function updatePageIndicator() {
     const entries = journalContent[currentSection];
     pageIndicator.textContent = `Page ${currentPage + 1} / ${entries.length}`;
     
-    // Activer/désactiver les boutons selon la position
-    prevPageBtn.disabled = currentPage === 0;
-    nextPageBtn.disabled = currentPage === entries.length - 1;
+    // Gérer la visibilité avec classes CSS
+    if (currentPage === 0) {
+        prevPageBtn.classList.add('hidden');
+        prevPageBtn.disabled = true;
+    } else {
+        prevPageBtn.classList.remove('hidden');
+        prevPageBtn.disabled = false;
+    }
+    
+    if (currentPage === entries.length - 1) {
+        nextPageBtn.classList.add('hidden');
+        nextPageBtn.disabled = true;
+    } else {
+        nextPageBtn.classList.remove('hidden');
+        nextPageBtn.disabled = false;
+    }
 }
 
 // Gérer le tournage de page - version simplifiée

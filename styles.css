@@ -170,11 +170,18 @@ body {
     color: var(--gold-color);
     cursor: pointer;
     padding: 0 15px;
-    transition: transform 0.2s;
+    transition: transform 0.2s, opacity 0.3s;
 }
 
 .page-btn:hover {
     transform: scale(1.2);
+}
+
+/* Pour une transition plus douce de l'apparition/disparition */
+.page-btn.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.8);
 }
 
 #page-indicator {
