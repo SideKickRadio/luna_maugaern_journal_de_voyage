@@ -118,7 +118,7 @@ function updatePageIndicator() {
     nextPageBtn.disabled = currentPage === entries.length - 1;
 }
 
-// Gérer le tournage de page
+// Gérer le tournage de page - version simplifiée
 function turnPage(direction) {
     const entries = journalContent[currentSection];
     
@@ -126,38 +126,41 @@ function turnPage(direction) {
     if (direction === 'next' && currentPage >= entries.length - 1) return;
     if (direction === 'prev' && currentPage <= 0) return;
     
-    // Préparer les éléments pour l'animation
-    const leftPage = leftPageContent.parentElement;
-    const rightPage = rightPageContent.parentElement;
+    // Récupérer les conteneurs de contenu
+    const leftContent = document.querySelector('.left-page .page-content');
+    const rightContent = document.querySelector('.right-page .page-content');
     
-    // Appliquer les classes d'animation
-    if (direction === 'next') {
-        leftPage.classList.add('page-turn-right');
-        rightPage.classList.add('page-turn-left');
-    } else {
-        leftPage.classList.add('page-turn-left');
-        rightPage.classList.add('page-turn-right');
-    }
+    // 1. Faire disparaître le contenu actuel
+    leftContent.classList.add('fade-out');
+    rightContent.classList.add('fade-out');
     
-    // Attendre que l'animation soit terminée avant de changer le contenu
+    // 2. Après que le contenu ait disparu, changer la page et afficher le nouveau contenu
     setTimeout(() => {
-        // Mettre à jour la page actuelle
+        // Mettre à jour l'index de page
         if (direction === 'next') {
             currentPage++;
         } else {
             currentPage--;
         }
         
-        // Retirer les classes d'animation
-        leftPage.classList.remove('page-turn-right', 'page-turn-left');
-        rightPage.classList.remove('page-turn-right', 'page-turn-left');
+        // Mettre à jour le contenu
+        displayCurrentEntry();
+        updatePageIndicator();
         
-        // Petite pause avant d'afficher le nouveau contenu
+        // Retirer la classe de disparition
+        leftContent.classList.remove('fade-out');
+        rightContent.classList.remove('fade-out');
+        
+        // Ajouter la classe d'apparition
+        leftContent.classList.add('fade-in');
+        rightContent.classList.add('fade-in');
+        
+        // Nettoyer les classes d'animation après la fin
         setTimeout(() => {
-            displayCurrentEntry();
-            updatePageIndicator();
-        }, 50);
-    }, 400); // Légèrement plus long que la durée de l'animation CSS
+            leftContent.classList.remove('fade-in');
+            rightContent.classList.remove('fade-in');
+        }, 300);
+    }, 300);
 }
 
 // Changer de section
