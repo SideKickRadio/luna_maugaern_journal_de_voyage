@@ -79,27 +79,21 @@ function initNavigation() {
             navButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
             
-            // Affichage des sections
-            Object.keys(sections).forEach(key => {
-                if (sections[key]) {
-                    sections[key].classList.remove('active');
-                }
+            // Cacher TOUTES les sections
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active');
             });
-            if (sections[section]) {
-                sections[section].classList.add('active');
-            }
-            
-            // Réinitialiser le journal si nécessaire
-            if (section === 'journal' && leftPageContent) {
-                displayCurrentEntry();
-                updatePageIndicator();
-            }
         });
     });
     
-    // Initialisation (journal visible par défaut)
+    // Initialisation - cache tout et affiche seulement le journal
+    document.querySelectorAll('.content-section').forEach(sec => {
+        sec.classList.remove('active');
+    });
     if (sections['journal']) {
         sections['journal'].classList.add('active');
+        // Activer aussi le bon bouton
+        document.querySelector('.nav-btn[data-section="journal"]').classList.add('active');
     }
 }
 
@@ -301,8 +295,8 @@ function initGallery() {
     const modalClose = document.querySelector('.modal-close');
     
     if (!gallery) return;
-    
-    // Créer les éléments de la galerie
+
+    // Créer les éléments de la galerie directement
     illustrations.forEach(illustration => {
         const item = document.createElement('div');
         item.className = 'illustration-item';
@@ -310,15 +304,7 @@ function initGallery() {
             <img src="${illustration.image}" alt="${illustration.title}">
             <div class="caption">${illustration.title}</div>
         `;
-        
-        // Ouvrir le modal au clic
-        item.addEventListener('click', () => {
-            modal.classList.add('active');
-            modalImage.src = illustration.image;
-            modalImage.alt = illustration.title;
-            modalDescription.textContent = illustration.description;
-        });
-        
+
         gallery.appendChild(item);
     });
     
@@ -344,7 +330,7 @@ function initGallery() {
 
 // Modifie ton DOMContentLoaded pour inclure la galerie
 document.addEventListener('DOMContentLoaded', () => {
-    initJournal();
     initNavigation();
+    initJournal();
     initGallery();
 });
