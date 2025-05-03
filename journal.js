@@ -36,12 +36,6 @@ const journalContent = {
             }
         },
         // Ajouter plus d'entrées ici
-    ],
-    letters: [
-        // Structure pour les lettres
-    ],
-    sketches: [
-        // Structure pour les croquis
     ]
 };
 
@@ -50,18 +44,63 @@ let currentSection = 'adventures';
 let currentPage = 0;
 
 // Éléments DOM
-const leftPageContent = document.querySelector('.left-page .page-content');
-const rightPageContent = document.querySelector('.right-page .page-content');
-const pageIndicator = document.getElementById('page-indicator');
-const prevPageBtn = document.getElementById('prev-page');
-const nextPageBtn = document.getElementById('next-page');
-const navButtons = document.querySelectorAll('.nav-btn');
+let leftPageContent, rightPageContent, pageIndicator, prevPageBtn, nextPageBtn;
 
 // Initialisation
-function init() {
-    displayCurrentEntry();
-    updatePageIndicator();
-    setupEventListeners();
+function initJournal() {
+    // Sélecteurs avec vérification
+    leftPageContent = document.querySelector('.left-page .page-content');
+    rightPageContent = document.querySelector('.right-page .page-content');
+    pageIndicator = document.getElementById('page-indicator');
+    prevPageBtn = document.getElementById('prev-page');
+    nextPageBtn = document.getElementById('next-page');
+    
+    // Seulement si tous les éléments sont présents
+    if (leftPageContent && rightPageContent && pageIndicator && prevPageBtn && nextPageBtn) {
+        displayCurrentEntry();
+        updatePageIndicator();
+        setupEventListeners();
+    }
+}
+
+// Navigation principale
+function initNavigation() {
+    const navButtons = document.querySelectorAll('.main-navigation .nav-btn');
+    const sections = {
+        'journal': document.getElementById('journal-section'),
+        'illustrations': document.getElementById('illustrations-section')
+    };
+    
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const section = button.dataset.section;
+            
+            // Mise à jour des boutons
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Affichage des sections
+            Object.keys(sections).forEach(key => {
+                if (sections[key]) {
+                    sections[key].classList.remove('active');
+                }
+            });
+            if (sections[section]) {
+                sections[section].classList.add('active');
+            }
+            
+            // Réinitialiser le journal si nécessaire
+            if (section === 'journal' && leftPageContent) {
+                displayCurrentEntry();
+                updatePageIndicator();
+            }
+        });
+    });
+    
+    // Initialisation (journal visible par défaut)
+    if (sections['journal']) {
+        sections['journal'].classList.add('active');
+    }
 }
 
 // Afficher l'entrée actuelle
@@ -198,12 +237,6 @@ function setupEventListeners() {
     prevPageBtn.addEventListener('click', () => turnPage('prev'));
     nextPageBtn.addEventListener('click', () => turnPage('next'));
     
-    navButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            changeSection(btn.dataset.section);
-        });
-    });
-    
     // Gestion des touches clavier
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
@@ -214,5 +247,104 @@ function setupEventListeners() {
     });
 }
 
-// Lancer l'application
-document.addEventListener('DOMContentLoaded', init);
+// Ajoute cette partie au début de ton journal.js
+document.addEventListener('DOMContentLoaded', () => {
+    const navButtons = document.querySelectorAll('.main-navigation .nav-btn');
+    const sections = {
+        'journal': document.getElementById('journal-section'),
+        'illustrations': document.getElementById('illustrations-section')
+    };
+    
+    navButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const section = button.dataset.section;
+            
+            // Mise à jour des boutons
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Affichage des sections
+            Object.keys(sections).forEach(key => {
+                sections[key].classList.remove('active');
+            });
+            sections[section].classList.add('active');
+        });
+    });
+    
+    // Initialisation (journal visible par défaut)
+    sections['journal'].classList.add('active');
+});
+
+// Structure des données d'illustrations
+const illustrations = [
+    {
+        id: 1,
+        title: "Test 1",
+        image: "./img/luna_maug_night_lights.webp",
+        description: "Test 1"
+    },
+    {
+        id: 2,
+        title: "Test 2",
+        image: "./img/luna_maug_symbole.png",
+        description: "Test 2"
+    },
+    // Ajoute d'autres illustrations ici
+];
+
+// Initialisation de la galerie
+function initGallery() {
+    const gallery = document.querySelector('.illustration-gallery');
+    const modal = document.getElementById('illustration-modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalDescription = document.getElementById('modal-description');
+    const modalClose = document.querySelector('.modal-close');
+    
+    if (!gallery) return;
+    
+    // Créer les éléments de la galerie
+    illustrations.forEach(illustration => {
+        const item = document.createElement('div');
+        item.className = 'illustration-item';
+        item.innerHTML = `
+            <img src="${illustration.image}" alt="${illustration.title}">
+            <div class="caption">${illustration.title}</div>
+        `;
+        
+        // Ouvrir le modal au clic
+        item.addEventListener('click', () => {
+            modal.classList.add('active');
+            modalImage.src = illustration.image;
+            modalImage.alt = illustration.title;
+            modalDescription.textContent = illustration.description;
+        });
+        
+        gallery.appendChild(item);
+    });
+    
+    // Fermer le modal
+    const closeModal = () => {
+        modal.classList.remove('active');
+    };
+    
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    
+    // Fermer avec Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+}
+
+// Modifie ton DOMContentLoaded pour inclure la galerie
+document.addEventListener('DOMContentLoaded', () => {
+    initJournal();
+    initNavigation();
+    initGallery();
+});
