@@ -12,9 +12,8 @@
     --night-blue-shadow: rgba(50, 75, 101, 0.3);
     --mystic-purple: #7a6b8e;
     --mystic-purple-light: rgba(122, 107, 142, 0.2);
-    --background-dark: #2f3435;
-    --journal-background: #4a3f54;
-    --black-shadow: rgba(0, 0, 0, 0.5);
+    --journal-background: #2a252a;
+    --black-shadow: rgba(0, 0, 0, 0.35);
     --black-medium: rgba(0, 0, 0, 0.2);
 }
 
@@ -25,7 +24,11 @@
 }
 
 body {
-    background-color: var(--background-dark);
+    background: 
+        url('./img/custom_texture.png'),
+        radial-gradient(circle at center, #2a252a 0%, #211823 40%, #1a1520 70%, #0f0f10 100%);
+    background-repeat: repeat;
+    background-blend-mode: overlay;
     font-family: 'Tagesschrift', serif;
     color: var(--ink-color);
     line-height: 1.6;
@@ -39,7 +42,7 @@ body {
 .journal {
     width: 100%;
     max-width: 1200px;
-    background-color: var(--journal-background);
+    background: var(--journal-background);
     border-radius: 10px;
     box-shadow: 0 10px 30px var(--black-shadow);
     padding: 20px;
@@ -261,7 +264,11 @@ body {
 /* Responsive */
 @media (max-width: 768px) {
     body {
-        background-color: var(--background-dark);
+        background: 
+        url('./img/custom_texture.png'),
+        linear-gradient(145deg, #1c1521 0%, #211823 30%, #b0a53f 60%, #ffc815 100%);
+        background-repeat: repeat;
+        background-blend-mode: overlay;
     }
     
     .journal-spread {
