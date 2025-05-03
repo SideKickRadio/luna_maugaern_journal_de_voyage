@@ -34,9 +34,6 @@ body {
     color: var(--ink-color);
     line-height: 1.6;
     padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100%;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -224,6 +221,7 @@ body {
     box-shadow: 0 10px 30px var(--black-shadow);
     padding: 20px;
     position: relative;
+    margin: 0 auto; 
 }
 
 .journal-header {
