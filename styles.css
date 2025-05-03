@@ -60,7 +60,7 @@ body {
 }
 
 .journal-header h1 {
-    font-family: 'Cal Sans', cursive;
+    font-family: 'Geologica', sans-serif;
     font-size: 2.5rem;
     margin-bottom: 5px;
     text-shadow: 1px 1px 3px var(--night-blue-shadow);
@@ -132,7 +132,7 @@ body {
     font-size: 1.8rem;
     color: var(--gold-color);
     margin-bottom: 20px;
-    font-family: 'Cal Sans', cursive;
+    font-family: 'Geologica', sans-serif;
     text-shadow: 0 0 2px rgba(230, 199, 121, 0.3);
 }
 
@@ -154,7 +154,7 @@ body {
 
 /* Note en marge */
 .margin-note {
-    font-family: 'Tagesschrift', cursive;
+    font-family: 'Tagesschrift', sans-serif;
     font-size: 0.9rem;
     color: var(--mystic-purple);
     transform: rotate(-3deg);
