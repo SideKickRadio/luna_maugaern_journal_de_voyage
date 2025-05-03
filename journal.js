@@ -18,7 +18,7 @@ const journalContent = {
             rightPage: {
                 type: "illustration",
                 image: "./img/luna_maug_symbole.png",
-                caption: "Les rues de Hurlevent où nos chemins se sont croisés"
+                caption: "Notre tatouage"
             }
         },
         {
@@ -27,12 +27,12 @@ const journalContent = {
                 date: "Pleine lune",
                 location: "Bosquet du Crépuscule",
                 title: "Repos sous la voûte",
-                content: `Une longue respiration rauque. Le scintillement du puits de lune à proximité. Le bruissement des feuilles au loin, haut vers la cime des grands arbres du bosquet. Et parfois, le passage furtif d'un petit animal sauvage passant par là. Rien de plus. L'atmosphère de ce sanctuaire nous a enveloppés le temps de deux maigres heures.`,
+                content: `Test deux`,
                 notes: []
             },
             rightPage: {
                 type: "continuation",
-                content: `Un laps de temps qui sembla fuser à une vitesse infinie tant le repos fut profond. Car bien que recouvert d'une épaisse écorce parsemée de végétation, l'ours émettait une aura bien particulière. Une confiance. Une force. Une simplicité. Une chaleur. Une complicité.`
+                content: `Suite test`
             }
         },
         // Ajouter plus d'entrées ici
