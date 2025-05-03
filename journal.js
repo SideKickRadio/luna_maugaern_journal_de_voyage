@@ -7,7 +7,7 @@ const journalContent = {
                 date: "Premier croissant",
                 location: "Hurlevent",
                 title: "Première rencontre",
-                content: `J'ai croisé aujourd'hui, au détour d'une ruelle non loin de l'église de Hurlevent, une silhouette aux habits typiques de ma contrée. Le cuir et les fourrures qu'elle arborait m'ont rappelé le Berceau-de-l'Hiver... Mon attention fut aussitôt piquée et mon jugement brouillé.`,
+                content: `Première page`,
                 notes: [
                     {
                         text: "Ses yeux dorés... comme une étoile dans la nuit",
@@ -17,7 +17,7 @@ const journalContent = {
             },
             rightPage: {
                 type: "illustration",
-                image: "images/rencontre-hurlevent.jpg",
+                image: "./img/luna_maug_symbole.png",
                 caption: "Les rues de Hurlevent où nos chemins se sont croisés"
             }
         },
