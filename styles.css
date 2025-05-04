@@ -100,9 +100,6 @@ body {
 }
 
 /* Containers pour les sections */
-.content-section {
-    display: none;
-}
 
 .content-section.active {
     display: block;

@@ -59,7 +59,7 @@ const journalContent = {
             }
         }
     ],
-    sketches: [
+    illustrations: [
         // Structure pour les illustrations/croquis
         {
             id: 1,
@@ -111,74 +111,110 @@ function init() {
 
 // Afficher l'entrée actuelle
 function displayCurrentEntry() {
+    // Vérifier que la section actuelle existe
+    if (!journalContent[currentSection]) {
+        console.error(`Section '${currentSection}' introuvable`);
+        leftPageContent.innerHTML = `<div class="entry-body">Section non disponible.</div>`;
+        rightPageContent.innerHTML = "";
+        return;
+    }
+    
     const entries = journalContent[currentSection];
+    
+    // Vérifier que la section contient des entrées
     if (!entries || entries.length === 0) {
+        console.log(`Aucune entrée dans la section '${currentSection}'`);
         leftPageContent.innerHTML = `<div class="entry-body">Aucune entrée disponible pour cette section.</div>`;
         rightPageContent.innerHTML = "";
         return;
     }
     
+    // Vérifier que la page courante est valide
+    if (currentPage < 0 || currentPage >= entries.length) {
+        console.error(`Page invalide: ${currentPage} (max: ${entries.length - 1})`);
+        currentPage = 0; // Réinitialiser à la première page
+    }
+    
+    console.log(`Affichage de la page ${currentPage + 1}/${entries.length} de la section '${currentSection}'`);
+    
     const entry = entries[currentPage];
     
-    // Page gauche
+    // Afficher le contenu de la page gauche
     if (entry.leftPage) {
         const leftHTML = `
             <div class="entry-header">
-                <span class="entry-date">${entry.leftPage.date}</span>
-                <span class="entry-location">${entry.leftPage.location}</span>
+                <span class="entry-date">${entry.leftPage.date || 'Date inconnue'}</span>
+                <span class="entry-location">${entry.leftPage.location || 'Lieu inconnu'}</span>
             </div>
-            <h3 class="entry-title">${entry.leftPage.title}</h3>
-            <div class="entry-body">${entry.leftPage.content}</div>
+            <h3 class="entry-title">${entry.leftPage.title || 'Sans titre'}</h3>
+            <div class="entry-body">${entry.leftPage.content || ''}</div>
             ${entry.leftPage.notes ? entry.leftPage.notes.map(note => `
-                <div class="margin-note ${note.position}">
-                    ${note.text}
+                <div class="margin-note ${note.position || 'top-right'}">
+                    ${note.text || ''}
                 </div>
             `).join('') : ''}
         `;
         leftPageContent.innerHTML = leftHTML;
+    } else {
+        leftPageContent.innerHTML = `<div class="entry-body">Pas de contenu disponible.</div>`;
     }
     
-    // Page droite
+    // Afficher le contenu de la page droite
     if (entry.rightPage) {
         let rightHTML = '';
         
-        if (entry.rightPage.type === 'illustration') {
-            rightHTML = `
-                <img src="${entry.rightPage.image}" class="entry-illustration" alt="${entry.rightPage.caption}">
-                <p class="image-caption">${entry.rightPage.caption}</p>
-            `;
-        } else if (entry.rightPage.type === 'continuation') {
-            rightHTML = `
-                <div class="entry-body continuation">${entry.rightPage.content}</div>
-            `;
-        } else if (entry.rightPage.type === 'gallery') {
-            // Galerie d'images pour la section croquis
-            rightHTML = `
-                <div class="image-gallery">
-                    ${entry.rightPage.images.map((img, index) => `
-                        <div class="thumbnail-container">
-                            <img src="${img.thumbnail}" 
-                                 class="thumbnail" 
-                                 alt="${img.caption}"
-                                 data-index="${index}"
-                                 data-full="${img.fullImage}">
-                            <p class="thumbnail-caption">${img.caption}</p>
+        switch (entry.rightPage.type) {
+            case 'illustration':
+                rightHTML = `
+                    <img src="${entry.rightPage.image}" class="entry-illustration" alt="${entry.rightPage.caption || 'Illustration'}" onerror="this.src='img/placeholder.jpg'; this.alt='Image non disponible';">
+                    <p class="image-caption">${entry.rightPage.caption || ''}</p>
+                `;
+                break;
+                
+            case 'continuation':
+                rightHTML = `
+                    <div class="entry-body continuation">${entry.rightPage.content || ''}</div>
+                `;
+                break;
+                
+            case 'gallery':
+                if (entry.rightPage.images && entry.rightPage.images.length > 0) {
+                    rightHTML = `
+                        <div class="image-gallery">
+                            ${entry.rightPage.images.map((img, index) => `
+                                <div class="thumbnail-container">
+                                    <img src="${img.thumbnail}" 
+                                         class="thumbnail" 
+                                         alt="${img.caption || 'Miniature'}" 
+                                         data-index="${index}"
+                                         data-full="${img.fullImage}"
+                                         onerror="this.src='img/placeholder.jpg'; this.alt='Miniature non disponible';">
+                                    <p class="thumbnail-caption">${img.caption || ''}</p>
+                                </div>
+                            `).join('')}
                         </div>
-                    `).join('')}
-                </div>
-                <div class="fullsize-container" style="display: none;">
-                    <img src="" class="fullsize-image" alt="">
-                    <span class="close-fullsize">&times;</span>
-                </div>
-            `;
+                        <div class="fullsize-container" style="display: none;">
+                            <img src="" class="fullsize-image" alt="">
+                            <span class="close-fullsize">&times;</span>
+                        </div>
+                    `;
+                } else {
+                    rightHTML = `<div class="entry-body">Aucune image disponible dans cette galerie.</div>`;
+                }
+                break;
+                
+            default:
+                rightHTML = `<div class="entry-body">Type de page non reconnu.</div>`;
         }
         
         rightPageContent.innerHTML = rightHTML;
         
-        // Ajouter des écouteurs d'événements pour les miniatures si c'est une galerie
-        if (entry.rightPage.type === 'gallery') {
+        // Configurer les interactions pour les galeries
+        if (entry.rightPage.type === 'gallery' && entry.rightPage.images && entry.rightPage.images.length > 0) {
             setupGalleryListeners();
         }
+    } else {
+        rightPageContent.innerHTML = `<div class="entry-body">Pas de contenu disponible.</div>`;
     }
 }
 
@@ -277,12 +313,33 @@ function turnPage(direction) {
 
 // Changer de section
 function changeSection(section) {
-    if (section === currentSection) return; // Ne rien faire si on clique sur la section active
+    // Vérifier que la section demandée existe dans notre structure de données
+    if (!journalContent[section]) {
+        console.error(`Section '${section}' non trouvée dans journalContent`);
+        return;
+    }
     
+    // Si on clique sur la section déjà active, ne rien faire
+    if (section === currentSection) {
+        console.log(`Section '${section}' déjà active`);
+        return;
+    }
+    
+    console.log(`Changement de section: '${currentSection}' -> '${section}'`);
+    
+    // Mettre à jour la section active
     currentSection = section;
     currentPage = 0;
-    displayCurrentEntry();
-    updatePageIndicator();
+    
+    // Réinitialiser l'affichage
+    try {
+        displayCurrentEntry();
+        updatePageIndicator();
+    } catch (error) {
+        console.error(`Erreur lors de l'affichage de la section '${section}':`, error);
+        leftPageContent.innerHTML = `<div class="entry-body">Erreur lors de l'affichage: ${error.message}</div>`;
+        rightPageContent.innerHTML = "";
+    }
     
     // Mettre à jour les boutons de navigation
     navButtons.forEach(btn => {
