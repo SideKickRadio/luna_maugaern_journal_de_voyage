@@ -7,7 +7,7 @@ const journalContent = {
                 date: "Premier croissant",
                 location: "Hurlevent",
                 title: "Première rencontre",
-                content: `Première page`,
+                content: `J'ai croisé aujourd'hui, au détour d'une ruelle non loin de l'église de Hurlevent, une silhouette aux habits typiques de ma contrée. Le cuir et les fourrures qu'elle arborait m'ont rappelé le Berceau-de-l'Hiver... Mon attention fut aussitôt piquée et mon jugement brouillé.`,
                 notes: [
                     {
                         text: "Ses yeux dorés... comme une étoile dans la nuit",
@@ -17,8 +17,8 @@ const journalContent = {
             },
             rightPage: {
                 type: "illustration",
-                image: "./img/luna_maug_symbole.png",
-                caption: "Notre tatouage"
+                image: "img/placeholder.jpg",
+                caption: "Les rues de Hurlevent où nos chemins se sont croisés"
             }
         },
         {
@@ -27,80 +27,96 @@ const journalContent = {
                 date: "Pleine lune",
                 location: "Bosquet du Crépuscule",
                 title: "Repos sous la voûte",
-                content: `Test deux`,
+                content: `Une longue respiration rauque. Le scintillement du puits de lune à proximité. Le bruissement des feuilles au loin, haut vers la cime des grands arbres du bosquet. Et parfois, le passage furtif d'un petit animal sauvage passant par là. Rien de plus. L'atmosphère de ce sanctuaire nous a enveloppés le temps de deux maigres heures.`,
                 notes: []
             },
             rightPage: {
                 type: "continuation",
-                content: `Suite test`
+                content: `Un laps de temps qui sembla fuser à une vitesse infinie tant le repos fut profond. Car bien que recouvert d'une épaisse écorce parsemée de végétation, l'ours émettait une aura bien particulière. Une confiance. Une force. Une simplicité. Une chaleur. Une complicité.`
             }
         },
         // Ajouter plus d'entrées ici
+    ],
+    letters: [
+        // Exemple de structure pour les lettres
+        {
+            id: 1,
+            leftPage: {
+                date: "Dernier croissant",
+                location: "Boralus",
+                title: "Lettre à Naerie",
+                content: `Ma chère Naerie, les vents ont tourné et mes pas m'ont mené vers l'Est. Je pensais trouver l'oubli loin du Berceau, mais certaines choses nous suivent, n'est-ce pas? J'espère que tu comprends mieux mon départ maintenant.`,
+                notes: [
+                    {
+                        text: "Je n'ai jamais pu lui dire adieu...",
+                        position: "bottom-left"
+                    }
+                ]
+            },
+            rightPage: {
+                type: "continuation",
+                content: `La ville m'étouffe parfois, mais j'y ai rencontré des âmes qui valent la peine qu'on se batte pour elles. Tu te moquerais sûrement de me voir ainsi, adouci par le temps. Prends soin de toi, ma sœur.`
+            }
+        }
+    ],
+    sketches: [
+        // Structure pour les illustrations/croquis
+        {
+            id: 1,
+            leftPage: {
+                date: "Mi-saison",
+                location: "Bosquet du Crépuscule",
+                title: "Étude de l'Arbre-Refuge",
+                content: `J'ai essayé de capturer l'essence de notre refuge. Les racines semblent former un berceau naturel, comme si l'arbre lui-même nous invitait à nous reposer.`,
+                notes: []
+            },
+            rightPage: {
+                type: "gallery",
+                images: [
+                    {
+                        thumbnail: "images/bosquet-thumb.jpg",
+                        fullImage: "images/bosquet-full.jpg",
+                        caption: "L'arbre-refuge, vu du sud"
+                    },
+                    {
+                        thumbnail: "images/ours-thumb.jpg",
+                        fullImage: "images/ours-full.jpg",
+                        caption: "Forme d'ours, première esquisse"
+                    }
+                ]
+            }
+        }
     ]
 };
 
 // État de l'application
 let currentSection = 'adventures';
 let currentPage = 0;
+let selectedImage = null;
 
 // Éléments DOM
-let leftPageContent, rightPageContent, pageIndicator, prevPageBtn, nextPageBtn;
+const leftPageContent = document.querySelector('.left-page .page-content');
+const rightPageContent = document.querySelector('.right-page .page-content');
+const pageIndicator = document.getElementById('page-indicator');
+const prevPageBtn = document.getElementById('prev-page');
+const nextPageBtn = document.getElementById('next-page');
+const navButtons = document.querySelectorAll('.nav-btn');
 
 // Initialisation
-function initJournal() {
-    // Sélecteurs avec vérification
-    leftPageContent = document.querySelector('.left-page .page-content');
-    rightPageContent = document.querySelector('.right-page .page-content');
-    pageIndicator = document.getElementById('page-indicator');
-    prevPageBtn = document.getElementById('prev-page');
-    nextPageBtn = document.getElementById('next-page');
-    
-    // Seulement si tous les éléments sont présents
-    if (leftPageContent && rightPageContent && pageIndicator && prevPageBtn && nextPageBtn) {
-        displayCurrentEntry();
-        updatePageIndicator();
-        setupEventListeners();
-    }
-}
-
-// Navigation principale
-function initNavigation() {
-    const navButtons = document.querySelectorAll('.main-navigation .nav-btn');
-    const sections = {
-        'journal': document.getElementById('journal-section'),
-        'illustrations': document.getElementById('illustrations-section')
-    };
-    
-    navButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const section = button.dataset.section;
-            
-            // Mise à jour des boutons
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            // Cacher TOUTES les sections
-            document.querySelectorAll('.content-section').forEach(sec => {
-                sec.classList.remove('active');
-            });
-        });
-    });
-    
-    // Initialisation - cache tout et affiche seulement le journal
-    document.querySelectorAll('.content-section').forEach(sec => {
-        sec.classList.remove('active');
-    });
-    if (sections['journal']) {
-        sections['journal'].classList.add('active');
-        // Activer aussi le bon bouton
-        document.querySelector('.nav-btn[data-section="journal"]').classList.add('active');
-    }
+function init() {
+    displayCurrentEntry();
+    updatePageIndicator();
+    setupEventListeners();
 }
 
 // Afficher l'entrée actuelle
 function displayCurrentEntry() {
     const entries = journalContent[currentSection];
-    if (!entries || entries.length === 0) return;
+    if (!entries || entries.length === 0) {
+        leftPageContent.innerHTML = `<div class="entry-body">Aucune entrée disponible pour cette section.</div>`;
+        rightPageContent.innerHTML = "";
+        return;
+    }
     
     const entry = entries[currentPage];
     
@@ -113,11 +129,11 @@ function displayCurrentEntry() {
             </div>
             <h3 class="entry-title">${entry.leftPage.title}</h3>
             <div class="entry-body">${entry.leftPage.content}</div>
-            ${entry.leftPage.notes.map(note => `
+            ${entry.leftPage.notes ? entry.leftPage.notes.map(note => `
                 <div class="margin-note ${note.position}">
                     ${note.text}
                 </div>
-            `).join('')}
+            `).join('') : ''}
         `;
         leftPageContent.innerHTML = leftHTML;
     }
@@ -135,82 +151,134 @@ function displayCurrentEntry() {
             rightHTML = `
                 <div class="entry-body continuation">${entry.rightPage.content}</div>
             `;
+        } else if (entry.rightPage.type === 'gallery') {
+            // Galerie d'images pour la section croquis
+            rightHTML = `
+                <div class="image-gallery">
+                    ${entry.rightPage.images.map((img, index) => `
+                        <div class="thumbnail-container">
+                            <img src="${img.thumbnail}" 
+                                 class="thumbnail" 
+                                 alt="${img.caption}"
+                                 data-index="${index}"
+                                 data-full="${img.fullImage}">
+                            <p class="thumbnail-caption">${img.caption}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="fullsize-container" style="display: none;">
+                    <img src="" class="fullsize-image" alt="">
+                    <span class="close-fullsize">&times;</span>
+                </div>
+            `;
         }
         
         rightPageContent.innerHTML = rightHTML;
+        
+        // Ajouter des écouteurs d'événements pour les miniatures si c'est une galerie
+        if (entry.rightPage.type === 'gallery') {
+            setupGalleryListeners();
+        }
     }
 }
 
-// Mettre à jour l'indicateur de page et gérer la visibilité des flèches
+// Configuration des écouteurs d'événements pour la galerie
+function setupGalleryListeners() {
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const fullsizeContainer = document.querySelector('.fullsize-container');
+    const fullsizeImage = document.querySelector('.fullsize-image');
+    const closeBtn = document.querySelector('.close-fullsize');
+    
+    thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', () => {
+            const fullImageSrc = thumb.dataset.full;
+            fullsizeImage.src = fullImageSrc;
+            fullsizeImage.alt = thumb.alt;
+            fullsizeContainer.style.display = 'flex';
+            selectedImage = parseInt(thumb.dataset.index);
+        });
+    });
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            fullsizeContainer.style.display = 'none';
+        });
+    }
+    
+    // Fermer l'image en cliquant n'importe où sur le conteneur
+    if (fullsizeContainer) {
+        fullsizeContainer.addEventListener('click', (e) => {
+            if (e.target === fullsizeContainer) {
+                fullsizeContainer.style.display = 'none';
+            }
+        });
+    }
+}
+
+// Mettre à jour l'indicateur de page
 function updatePageIndicator() {
     const entries = journalContent[currentSection];
+    if (!entries || entries.length === 0) {
+        pageIndicator.textContent = `Page 0 / 0`;
+        prevPageBtn.disabled = true;
+        nextPageBtn.disabled = true;
+        return;
+    }
+    
     pageIndicator.textContent = `Page ${currentPage + 1} / ${entries.length}`;
     
-    // Gérer la visibilité avec classes CSS
-    if (currentPage === 0) {
-        prevPageBtn.classList.add('hidden');
-        prevPageBtn.disabled = true;
-    } else {
-        prevPageBtn.classList.remove('hidden');
-        prevPageBtn.disabled = false;
-    }
-    
-    if (currentPage === entries.length - 1) {
-        nextPageBtn.classList.add('hidden');
-        nextPageBtn.disabled = true;
-    } else {
-        nextPageBtn.classList.remove('hidden');
-        nextPageBtn.disabled = false;
-    }
+    // Activer/désactiver les boutons selon la position
+    prevPageBtn.disabled = currentPage === 0;
+    nextPageBtn.disabled = currentPage === entries.length - 1;
 }
 
-// Gérer le tournage de page - version simplifiée
+// Gérer le tournage de page
 function turnPage(direction) {
     const entries = journalContent[currentSection];
+    if (!entries || entries.length === 0) return;
     
     // Vérifier si on peut tourner la page
     if (direction === 'next' && currentPage >= entries.length - 1) return;
     if (direction === 'prev' && currentPage <= 0) return;
     
-    // Récupérer les conteneurs de contenu
-    const leftContent = document.querySelector('.left-page .page-content');
-    const rightContent = document.querySelector('.right-page .page-content');
+    // Préparer les éléments pour l'animation
+    const leftPage = document.querySelector('.left-page');
+    const rightPage = document.querySelector('.right-page');
     
-    // 1. Faire disparaître le contenu actuel
-    leftContent.classList.add('fade-out');
-    rightContent.classList.add('fade-out');
+    // Appliquer les classes d'animation
+    if (direction === 'next') {
+        leftPage.classList.add('page-turn-right');
+        rightPage.classList.add('page-turn-left');
+    } else {
+        leftPage.classList.add('page-turn-left');
+        rightPage.classList.add('page-turn-right');
+    }
     
-    // 2. Après que le contenu ait disparu, changer la page et afficher le nouveau contenu
+    // Attendre que l'animation soit terminée avant de changer le contenu
     setTimeout(() => {
-        // Mettre à jour l'index de page
+        // Mettre à jour la page actuelle
         if (direction === 'next') {
             currentPage++;
         } else {
             currentPage--;
         }
         
-        // Mettre à jour le contenu
-        displayCurrentEntry();
-        updatePageIndicator();
+        // Retirer les classes d'animation
+        leftPage.classList.remove('page-turn-right', 'page-turn-left');
+        rightPage.classList.remove('page-turn-right', 'page-turn-left');
         
-        // Retirer la classe de disparition
-        leftContent.classList.remove('fade-out');
-        rightContent.classList.remove('fade-out');
-        
-        // Ajouter la classe d'apparition
-        leftContent.classList.add('fade-in');
-        rightContent.classList.add('fade-in');
-        
-        // Nettoyer les classes d'animation après la fin
+        // Petite pause avant d'afficher le nouveau contenu
         setTimeout(() => {
-            leftContent.classList.remove('fade-in');
-            rightContent.classList.remove('fade-in');
-        }, 300);
-    }, 300);
+            displayCurrentEntry();
+            updatePageIndicator();
+        }, 50);
+    }, 400); // Légèrement plus long que la durée de l'animation CSS
 }
 
 // Changer de section
 function changeSection(section) {
+    if (section === currentSection) return; // Ne rien faire si on clique sur la section active
+    
     currentSection = section;
     currentPage = 0;
     displayCurrentEntry();
@@ -231,106 +299,27 @@ function setupEventListeners() {
     prevPageBtn.addEventListener('click', () => turnPage('prev'));
     nextPageBtn.addEventListener('click', () => turnPage('next'));
     
+    navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            changeSection(btn.dataset.section);
+        });
+    });
+    
     // Gestion des touches clavier
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
             turnPage('next');
         } else if (e.key === 'ArrowLeft') {
             turnPage('prev');
+        } else if (e.key === 'Escape') {
+            // Fermer l'image plein écran si ouverte
+            const fullsizeContainer = document.querySelector('.fullsize-container');
+            if (fullsizeContainer && fullsizeContainer.style.display !== 'none') {
+                fullsizeContainer.style.display = 'none';
+            }
         }
     });
 }
 
-// Ajoute cette partie au début de ton journal.js
-document.addEventListener('DOMContentLoaded', () => {
-    const navButtons = document.querySelectorAll('.main-navigation .nav-btn');
-    const sections = {
-        'journal': document.getElementById('journal-section'),
-        'illustrations': document.getElementById('illustrations-section')
-    };
-    
-    navButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const section = button.dataset.section;
-            
-            // Mise à jour des boutons
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            // Affichage des sections
-            Object.keys(sections).forEach(key => {
-                sections[key].classList.remove('active');
-            });
-            sections[section].classList.add('active');
-        });
-    });
-    
-    // Initialisation (journal visible par défaut)
-    sections['journal'].classList.add('active');
-});
-
-// Structure des données d'illustrations
-const illustrations = [
-    {
-        id: 1,
-        title: "Test 1",
-        image: "./img/luna_maug_night_lights.webp",
-        description: "Test 1"
-    },
-    {
-        id: 2,
-        title: "Test 2",
-        image: "./img/luna_maug_symbole.png",
-        description: "Test 2"
-    },
-    // Ajoute d'autres illustrations ici
-];
-
-// Initialisation de la galerie
-function initGallery() {
-    const gallery = document.querySelector('.illustration-gallery');
-    const modal = document.getElementById('illustration-modal');
-    const modalImage = document.getElementById('modal-image');
-    const modalDescription = document.getElementById('modal-description');
-    const modalClose = document.querySelector('.modal-close');
-    
-    if (!gallery) return;
-
-    // Créer les éléments de la galerie directement
-    illustrations.forEach(illustration => {
-        const item = document.createElement('div');
-        item.className = 'illustration-item';
-        item.innerHTML = `
-            <img src="${illustration.image}" alt="${illustration.title}">
-            <div class="caption">${illustration.title}</div>
-        `;
-
-        gallery.appendChild(item);
-    });
-    
-    // Fermer le modal
-    const closeModal = () => {
-        modal.classList.remove('active');
-    };
-    
-    modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
-    
-    // Fermer avec Escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-}
-
-// Modifie ton DOMContentLoaded pour inclure la galerie
-document.addEventListener('DOMContentLoaded', () => {
-    initNavigation();
-    initJournal();
-    initGallery();
-});
+// Lancer l'application
+document.addEventListener('DOMContentLoaded', init);

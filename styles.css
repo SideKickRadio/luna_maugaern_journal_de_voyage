@@ -344,6 +344,85 @@ body {
     left: 20px;
 }
 
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.thumbnail {
+    position: relative;
+    overflow: hidden;
+}
+
+.thumbnail::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(201, 159, 56, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.thumbnail:hover::after, .thumbnail.selected::after {
+    opacity: 1;
+}
+
+.thumbnail {
+    cursor: pointer;
+    border: 3px solid var(--paper-color);
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.thumbnail:hover, .thumbnail.selected {
+    border-color: var(--accent-color);
+}
+
+.thumbnail img {
+    max-width: 100%;
+    height: auto;
+}
+
+.thumbnail-title {
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.full-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+img[src="img/placeholder.jpg"] {
+    background-color: rgba(0,0,0,0.1);
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+img[src="img/placeholder.jpg"]::after {
+    content: 'Image à venir';
+    position: absolute;
+    font-style: italic;
+    color: var(--accent-color);
+}
+
+.entry-signature {
+    font-family: 'Cal Sans', cursive;
+    text-align: right;
+    margin-top: 20px;
+    font-style: italic;
+}
+
 /* Contrôles de navigation */
 .page-controls {
     display: flex;
@@ -440,6 +519,84 @@ body {
     transition: all 0.5s ease-in-out;  /* Transitions plus douces */
 }
 
+/* Ajoutez ces styles à votre fichier styles.css */
+
+/* Styles pour la galerie d'images */
+.image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.thumbnail-container {
+    width: 45%;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.thumbnail-container:hover {
+    transform: scale(1.05);
+}
+
+.thumbnail {
+    max-width: 100%;
+    height: auto;
+    border: 3px solid var(--accent-color);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.thumbnail-caption {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    color: var(--accent-color);
+    font-style: italic;
+}
+
+/* Styles pour l'affichage plein écran */
+.fullsize-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.fullsize-image {
+    max-width: 90%;
+    max-height: 90%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    border: 5px solid var(--paper-color);
+}
+
+.close-fullsize {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: var(--paper-color);
+    font-size: 30px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.close-fullsize:hover {
+    transform: scale(1.2);
+}
+
+/* Optimisations pour les appareils mobiles */
+@media (max-width: 768px) {
+    .thumbnail-container {
+        width: 100%;
+    }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     body {
@@ -449,11 +606,13 @@ body {
     .journal-spread {
         flex-direction: column;
         height: auto;
+        min-height: auto;
     }
     
     .journal-page {
+        height: 60vh;
+        margin-bottom: 15px;
         border-radius: 5px;
-        margin-bottom: 10px;
     }
     
     .left-page {
@@ -464,5 +623,20 @@ body {
     .right-page {
         border-radius: 5px;
         border-left: none;
+    }
+
+    .margin-note {
+        position: relative;
+        max-width: 100%;
+        margin: 15px 0;
+        transform: rotate(0);
+    }
+
+    .margin-note.top-right,
+    .margin-note.bottom-left {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
     }
 }
