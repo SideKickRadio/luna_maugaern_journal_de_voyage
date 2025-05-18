@@ -7,82 +7,47 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Tagesschrift&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <!-- En-tête -->
-        <header class="main-header">
+    <header>
+        <div class="header-content">
             <h1>Les Chroniques de Luna et Maugaern</h1>
-        </header>
+            <p class="subtitle">Récits du Bosquet du Crépuscule</p>
+        </div>
+    </header>
 
-        <!-- Navigation principale -->
-        <nav class="main-nav">
-            <ul>
-                <li><a href="#" data-section="journal" class="nav-link active">Journal</a></li>
-                <li><a href="#" data-section="gallery" class="nav-link">Illustrations</a></li>
-            </ul>
-        </nav>
+    <nav class="tabs">
+        <button class="tab-btn active" data-tab="recits">Récits</button>
+        <button class="tab-btn" data-tab="illustrations">Illustrations</button>
+    </nav>
 
-        <!-- Section Journal -->
-        <section id="journal-section" class="content-section active">
-            <div class="journal">
-                <!-- Navigation entre pages -->
-                <div class="page-controls">
-                    <button id="prev-page" class="page-btn">&larr;</button>
-                    <span id="page-indicator">Page 1 / 3</span>
-                    <button id="next-page" class="page-btn">&rarr;</button>
-                </div>
-
-                <!-- Contenu principal -->
-                <main class="journal-spread">
-                    <!-- Page gauche -->
-                    <div class="journal-page left-page">
-                        <div class="page-content">
-                            <!-- Contenu injecté par JavaScript -->
-                        </div>
-                    </div>
-
-                    <!-- Page droite -->
-                    <div class="journal-page right-page">
-                        <div class="page-content">
-                            <!-- Contenu injecté par JavaScript -->
-                        </div>
-                    </div>
-                </main>
+    <main>
+        <!-- Section Récits -->
+        <section id="recits" class="tab-content active">
+            <div class="story-container">
+                <!-- Les récits seront injectés ici par JavaScript -->
             </div>
         </section>
 
-        <!-- Section Galerie -->
-        <section id="gallery-section" class="content-section">
-            <div class="gallery-container">
-                <div class="gallery-filter">
-                    <button class="filter-btn active" data-tag="all">Tout</button>
-                    <button class="filter-btn" data-tag="portrait">Portraits</button>
-                    <button class="filter-btn" data-tag="location">Lieux</button>
-                    <button class="filter-btn" data-tag="scene">Scènes</button>
-                </div>
-                
-                <div class="gallery-grid">
-                    <!-- Les illustrations seront injectées ici par JavaScript -->
-                </div>
-                
-                <!-- Lightbox pour afficher les images en grand -->
-                <div class="lightbox" style="display: none;">
-                    <div class="lightbox-content">
-                        <span class="close-lightbox">&times;</span>
-                        <img class="lightbox-image" src="" alt="">
-                        <div class="lightbox-caption"></div>
-                        <div class="lightbox-navigation">
-                            <button class="lightbox-prev">&larr;</button>
-                            <button class="lightbox-next">&rarr;</button>
-                        </div>
-                    </div>
-                </div>
+        <!-- Section Illustrations -->
+        <section id="illustrations" class="tab-content">
+            <div class="gallery">
+                <!-- Les illustrations seront injectées ici par JavaScript -->
+            </div>
+            <!-- Modal pour afficher les images en grand -->
+            <div id="image-modal" class="modal">
+                <span class="close-modal">&times;</span>
+                <img class="modal-content" id="modal-image">
+                <div id="modal-caption"></div>
             </div>
         </section>
-    </div>
+    </main>
 
-    <script src="main.js"></script>
+    <footer>
+        <p>&copy; 2025 - Les Chroniques de Luna et Maugaern</p>
+    </footer>
+
+    <script src="scripts.js"></script>
 </body>
 </html>
