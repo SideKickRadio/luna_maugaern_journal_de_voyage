@@ -16,6 +16,17 @@
 body {
     font-family: 'Cormorant Garamond', serif;
     background-color: var(--primary-color);
+    
+    /* Combinaison de dégradé et texture */
+    background-image: 
+        linear-gradient(to bottom, rgba(44, 36, 34, 0.95), rgba(64, 44, 42, 0.85)),
+        url('assets/custom_texture.png');
+    
+    /* Contrôle de la texture */
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-blend-mode: luminosity;
+
     color: var(--text-color);
     line-height: 1.6;
 }
@@ -126,7 +137,16 @@ main {
 }
 
 .story-header {
+    background-image: 
+        linear-gradient(to bottom, rgba(240, 233, 216, 0.9), rgba(202, 196, 183, 0.84));
+    padding: 40px;
     margin-bottom: 20px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    justify-content: flex-start;
+    border-radius: 8px;
 }
 
 .story-title {
@@ -140,13 +160,6 @@ main {
     font-style: italic;
     color: var(--secondary-color);
     margin-bottom: 5px;
-}
-
-.story-meta {
-    font-size: 0.9rem;
-    color: var(--secondary-color);
-    display: flex;
-    justify-content: space-between;
 }
 
 .story-content {
