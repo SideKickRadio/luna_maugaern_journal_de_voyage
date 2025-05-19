@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Données pour les récits (métadonnées + chemins des fichiers)
     const stories = [
         {
-            title: "Titre test",
-            subtitle: "Sous-titre test",
-            path: "stories/test.md"
+            title: "Ces nuits-là",
+            subtitle: "Le passé récent de Maugaern",
+            path: "stories/ces_nuits_la.md"
         }
         // Vous pourrez ajouter plus de récits ici
     ];

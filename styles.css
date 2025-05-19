@@ -193,6 +193,10 @@ main {
     color: var(--text-light);
 }
 
+.story-content p {
+    margin-bottom: 20px;
+}
+
 .story-content ul {
     list-style-type: none; /* Supprime les puces par défaut */
     padding-left: 0;
@@ -237,10 +241,6 @@ main {
 .story-content ol {
     list-style-position: inside; /* Place les puces à l'intérieur plutôt qu'à l'extérieur */
     padding-left: 0; /* Supprime l'indentation par défaut */
-}
-
-.story-content p:first-of-type::first-letter {
-    color: var(--accent-purple);
 }
 
 /* Section Illustrations */
