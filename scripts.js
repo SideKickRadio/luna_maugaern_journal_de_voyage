@@ -38,11 +38,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const text = await response.text();
-            return marked.parse(text); // Convertir Markdown en HTML
+            let htmlContent = marked.parse(text);
+            
+            // Détecter et marquer les dialogues de personnages
+            htmlContent = processDialogues(htmlContent);
+            
+            return htmlContent;
         } catch (error) {
             console.error('Erreur lors du chargement du récit:', error);
             return '<p>Impossible de charger ce récit.</p>';
         }
+    }
+
+    // Fonction pour détecter et formater les dialogues
+    function processDialogues(htmlContent) {
+        // Pattern pour Luna: "Luna :", "Luna:", etc.
+        htmlContent = htmlContent.replace(
+            /<li>(?:\*)?(?:<em>)?(?:—\s*)?(?:\s*)?(Luna\s*[:.]\s*)(?:<\/em>)?(.+?)(?:<\/li>)/gi, 
+            '<li class="luna">$2</li>'
+        );
+        
+        // Pattern pour Maugaern: "Maugaern :", "Maug':", "Maug :", etc.
+        htmlContent = htmlContent.replace(
+            /<li>(?:\*)?(?:<em>)?(?:—\s*)?(?:\s*)?(Mau(?:g|gaern)(?:'|aern)?\s*[:.]\s*)(?:<\/em>)?(.+?)(?:<\/li>)/gi, 
+            '<li class="maugaern">$2</li>'
+        );
+        
+        return htmlContent;
     }
 
     // Gestion des onglets
