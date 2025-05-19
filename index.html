@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>L'Étoile & l'Écorce - Voyages de Luna et Maugaern</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="L'Étoile & l'Écorce - Voyages de Luna & Maugaern à travers Azeroth">
+    <title>L'Étoile & l'Écorce - Voyages de Luna & Maugaern</title>
     <link rel="icon" href="assets/favicon.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -14,7 +15,7 @@
     <header>
         <div class="header-content">
             <h1>L'Étoile & l'Écorce</h1>
-            <p class="subtitle">Voyages de Luna et Maugaern</p>
+            <p class="subtitle">Voyages de Luna & Maugaern</p>
         </div>
     </header>
 
@@ -28,6 +29,7 @@
         <section id="recits" class="tab-content active">
             <div class="story-container">
                 <!-- Les récits seront injectés ici par JavaScript -->
+                <div id="loading-indicator">Chargement des récits...</div>
             </div>
         </section>
 
@@ -39,20 +41,20 @@
             <!-- Modal pour afficher les images en grand -->
             <div id="image-modal" class="modal">
                 <span class="close-modal">&times;</span>
-                <img class="modal-content" id="modal-image">
+                <img class="modal-content" id="modal-image" alt="Image agrandie">
                 <div id="modal-caption"></div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 - L'Étoile & l'Écorce - Voyages de Luna et Maugaern</p>
+        <p>&copy; 2025 - L'Étoile & l'Écorce</p>
     </footer>
 
-    <!-- Ajout de la bibliothèque Marked.js -->
+    <!-- Bibliothèques externes -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
-    <!-- Votre script principal -->
+    <!-- Script principal -->
     <script src="scripts.js"></script>
 </body>
 </html>
