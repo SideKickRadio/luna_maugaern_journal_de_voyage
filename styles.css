@@ -22,6 +22,27 @@
     /* Ombres */
     --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.5);
     --shadow-inner: inset 0 0 24px rgba(0, 0, 0, 0.2);
+
+    /* Polices */
+    --font-heading: 'Raleway', serif;
+    --font-body: 'Spectral', serif;
+}
+
+/* ===== FONTS ===== */
+@font-face {
+    font-family: 'Raleway';
+    src: url('assets/fonts/Raleway-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Spectral';
+    src: url('assets/fonts/Spectral-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
 }
 
 /* ===== RESET ET BASE ===== */
@@ -32,7 +53,7 @@
 }
 
 body {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-body);
     background-color: var(--bg-color);
     color: var(--text-light);
     line-height: 1.6;
@@ -58,7 +79,7 @@ header {
 }
 
 .header-content h1 {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: 3rem;
     margin-bottom: 10px;
     color: var(--accent-moon);
@@ -72,7 +93,6 @@ header {
 }
 
 .subtitle {
-    font-style: italic;
     font-size: 1.2rem;
     color: var(--text-muted);
 }
@@ -93,7 +113,7 @@ header {
     background: none;
     border: none;
     color: var(--text-muted);
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: 1.2rem;
     padding: 10px 30px;
     cursor: pointer;
@@ -181,7 +201,7 @@ main {
 }
 
 .story-title {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: 2rem;
     color: var(--accent-teal);
     margin-bottom: 10px;
@@ -189,7 +209,6 @@ main {
 }
 
 .story-subtitle {
-    font-style: italic;
     font-size: 1.1rem;
     color: var(--accent-moon);
     margin-bottom: 15px;
@@ -327,7 +346,7 @@ main {
 }
 
 .gallery-item-title {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-heading);
     font-size: 1rem;
     color: var(--accent-moon);
     margin-bottom: 5px;
