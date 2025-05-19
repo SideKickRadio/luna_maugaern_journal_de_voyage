@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const illustrations = [
         {
             title: "Promenade nocturne",
-            thumbnail: "img/luna_maug_night_lights.webp",
+            thumbnail: "img/luna_maug_night_lights_thumb.webp",
             fullImage: "img/luna_maug_night_lights.webp",
             description: "Deux silhouettes à l'ombre des arbres."
         }
@@ -54,13 +54,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // Pattern pour Luna
         htmlContent = htmlContent.replace(
             /<li>(?:\*)?(?:<em>)?(?:—\s*)?(?:\s*)?(Luna\s*[:.]\s*)(?:<\/em>)?(.+?)(?:<\/li>)/gi,
-            '<li class="luna"><span class="speaker-name">$1</span>$2</li>'
+            '<li class="luna">$2</li>'
         );
 
         // Pattern pour Maugaern
         htmlContent = htmlContent.replace(
             /<li>(?:\*)?(?:<em>)?(?:—\s*)?(?:\s*)?(Mau(?:g|gaern)(?:'|aern)?\s*[:.]\s*)(?:<\/em>)?(.+?)(?:<\/li>)/gi,
-            '<li class="maugaern"><span class="speaker-name">$1</span>$2</li>'
+            '<li class="maugaern">$2</li>'
         );
 
         return htmlContent;
@@ -113,10 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         <header class="story-header">
                             <h2 class="story-title">${story.title}</h2>
                             <h3 class="story-subtitle">${story.subtitle}</h3>
-                            <div class="story-meta">
-                                <span class="story-date">${story.date}</span>
-                                <span class="story-location">${story.location}</span>
-                            </div>
                         </header>
                         <div class="story-content">
                             ${storyContent}
@@ -146,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     <img src="${illustration.thumbnail}" alt="${illustration.title}" data-full="${illustration.fullImage}" data-description="${illustration.description}">
                     <div class="gallery-item-overlay">
                         <h3 class="gallery-item-title">${illustration.title}</h3>
-                        <p class="gallery-item-date">${illustration.date}</p>
                     </div>
                 `;
 

@@ -1,4 +1,5 @@
-**Première Partie**
+
+### **Première Partie**
 
 Ces nuits-là...
 
@@ -19,7 +20,7 @@ Ce sont les poings de son contremaître. "Entraîneur" diraient certains mais Ma
 
 Ces nuits-là, elles se ressemblent toutes.
 
-**Deuxième Partie**
+### **Deuxième Partie**
 
 Son contremaître l'attend juste derrière la porte. Ce petit gars qui semble être issu des docks de Boralus ne pourrait à aucun moment avoir l'ascendant sur l'enfant des étoiles. Et ce ne sont pas les raisons qui manquent au combattant aux longues oreilles pour lui distribuer des coups bien placés. Mais il n'est pas là pour ça. Et la petite teigne semble l'avoir bien compris depuis ces années. Le type sauve les apparences avec son air de malfrat tortionnaire et en lui gueulant dessus de temps en temps.
 
@@ -52,7 +53,7 @@ A ce moment, pour le club, il ne s'agit que de spectacle et d'or dont il faut ti
 
 Pour Maugaern, c'est l'heure de sortir de sa stase. C'est l'heure de la violence.
 
-**Troisième Partie**
+### **Troisième Partie**
 
 C’est maintenant.
 
@@ -103,7 +104,7 @@ Et il reste là. Allongé. Effacé. Dans les vapes pendant un instant. Certains 
 
 Il l’a méritée.
 
-**Quatrième Partie**
+### **Quatrième Partie**
 
 Les gens qui font leur vie autour du club ont tous au fond d’eux une part d’ombre qu’ils veulent garder. Parce qu’ils estiment que c’est pour leur propre bien ou alors qu’ils craignent le moment où ils devront vivre sans et révéler au grand jour ce que cette part obscure cache en eux.
 
