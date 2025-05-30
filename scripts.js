@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
             title: "Ces nuits-là",
             subtitle: "Le passé récent de Maugaern",
             path: "stories/ces_nuits_la.md",
-            tag: "oneshot",
+            tag: "recit",
             excerpt: "Ces nuits-là... Ces nuits-là, elles se ressemblent toutes. Il y a toujours un certain tumulte à l'intérieur, peu importe les enjeux du combat qui arrive. Les spectateurs se mélangent aux parieurs"
         }
         // Vous pourrez ajouter plus de récits ici
@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentStoryIndex = 0;
     let filteredStories = [];
     let currentFilter = 'all';
+    let scrollTimeout;
+    let isScrolling = false;
 
     // Éléments DOM
     const storyOverview = document.getElementById('story-overview');
@@ -45,6 +47,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const nextBtn = document.getElementById('next-story');
     const storyCounter = document.getElementById('story-counter');
     const filterBtns = document.querySelectorAll('.filter-btn');
+    const readerBackdrop = document.querySelector('.reader-backdrop');
+    const floatingNav = document.getElementById('floating-nav');
+    const floatingPrev = document.getElementById('floating-prev');
+    const floatingNext = document.getElementById('floating-next');
+    const floatingBackTop = document.getElementById('floating-back-top');
+    const floatingClose = document.getElementById('floating-close');
+    const readerHeader = document.querySelector('.reader-header');
 
     // Fonction pour charger un fichier Markdown
     async function loadMarkdownFile(path) {
@@ -145,9 +154,23 @@ document.addEventListener('DOMContentLoaded', function () {
         storyReader.classList.add('entering');
         document.body.style.overflow = 'hidden';
         
+        // Réinitialiser le scroll et l'état des éléments
+        storyReader.scrollTop = 0;
+        readerHeader.classList.remove('hidden');
+        floatingNav.classList.remove('visible');
+        
         setTimeout(() => {
             storyReader.classList.remove('entering');
         }, 300);
+    }
+
+    // Fonction pour mettre à jour la navigation flottante
+    function updateFloatingNav() {
+        const currentInFiltered = filteredStories.findIndex(s => s.index === currentStoryIndex);
+        const totalFiltered = filteredStories.length;
+        
+        floatingPrev.disabled = currentInFiltered <= 0;
+        floatingNext.disabled = currentInFiltered >= totalFiltered - 1;
     }
 
     // Fermer le lecteur immersif
@@ -171,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         updateNavigationButtons();
+        updateFloatingNav();
     }
 
     // Mettre à jour les boutons de navigation
@@ -223,6 +247,60 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Fonction pour gérer le scroll dans le reader
+    function handleReaderScroll() {
+        const scrollTop = storyReader.scrollTop;
+        const isAtTop = scrollTop < 50;
+        
+        // Afficher/masquer le header fixe
+        if (scrollTop > 100 && !isScrolling) {
+            readerHeader.classList.add('hidden');
+        } else if (scrollTop <= 100) {
+            readerHeader.classList.remove('hidden');
+        }
+        
+        // Afficher/masquer la navigation flottante
+        if (scrollTop > 200) {
+            floatingNav.classList.add('visible');
+        } else {
+            floatingNav.classList.remove('visible');
+        }
+        
+        // Marquer qu'on est en train de scroller
+        isScrolling = true;
+        
+        // Réinitialiser le flag après un délai
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            isScrolling = false;
+            // Réafficher le header si on arrête de scroller
+            if (storyReader.scrollTop <= 100) {
+                readerHeader.classList.remove('hidden');
+            }
+        }, 150);
+    }
+
+    // Fonction pour scroller vers le haut en douceur
+    function scrollToTop() {
+        storyReader.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    // Fonction pour fermer le reader (améliorée)
+    function closeStoryReader() {
+        storyReader.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        // Réinitialiser l'état du header et de la navigation
+        readerHeader.classList.remove('hidden');
+        floatingNav.classList.remove('visible');
+        
+        // Réinitialiser le scroll
+        storyReader.scrollTop = 0;
+    }
+
     // Gestion des onglets principaux
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -250,7 +328,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 <img src="${illustration.thumbnail}" alt="${illustration.title}" data-full="${illustration.fullImage}" data-description="${illustration.description}">
                 <div class="gallery-item-overlay">
                     <h3 class="gallery-item-title">${illustration.title}</h3>
-                    <p class="gallery-item-date">${illustration.date}</p>
                 </div>
             `;
             
@@ -311,11 +388,64 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    function setupReaderEventListeners() {
+        // Scroll dans le reader
+        storyReader.addEventListener('scroll', handleReaderScroll);
+        
+        // Clic sur l'arrière-plan pour fermer
+        readerBackdrop.addEventListener('click', closeStoryReader);
+        
+        // Navigation flottante
+        floatingPrev.addEventListener('click', () => navigateStory('prev'));
+        floatingNext.addEventListener('click', () => navigateStory('next'));
+        floatingBackTop.addEventListener('click', scrollToTop);
+        floatingClose.addEventListener('click', closeStoryReader);
+        
+        // Empêcher la fermeture quand on clique sur le contenu
+        currentStoryDiv.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+        
+        // Amélioration de la navigation clavier
+        document.addEventListener('keydown', (e) => {
+            if (storyReader.style.display === 'block') {
+                switch(e.key) {
+                    case 'Escape':
+                        closeStoryReader();
+                        break;
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        navigateStory('prev');
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        navigateStory('next');
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        scrollToTop();
+                        break;
+                }
+            }
+        });
+        
+        // Gestion du redimensionnement de la fenêtre
+        window.addEventListener('resize', () => {
+            if (storyReader.style.display === 'block') {
+                // Repositionner les éléments si nécessaire
+                setTimeout(() => {
+                    handleReaderScroll();
+                }, 100);
+            }
+        });
+    }
+
     // Initialisation
     async function initSite() {
         await loadAllStories();
         loadIllustrations();
         setupModal();
+        setupReaderEventListeners();
     }
 
     initSite();

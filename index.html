@@ -24,32 +24,45 @@
     <main>
         <!-- Section Récits -->
         <section id="recits" class="tab-content active">
-            <!-- Filtres -->
+            <!-- Vos filtres existants -->
             <div class="story-filters">
                 <button class="filter-btn active" data-filter="all">Tous les récits</button>
                 <button class="filter-btn" data-filter="journal">Journal</button>
-                <button class="filter-btn" data-filter="oneshot">Récits</button>
+                <button class="filter-btn" data-filter="recit">Récits</button>
             </div>
 
             <div class="story-container">
-                <!-- Vue d'ensemble - Liste compacte -->
+                <!-- Vue d'ensemble existante -->
                 <div id="story-overview" class="story-overview">
-                    <!-- Les aperçus seront injectés ici -->
                     <div id="loading-indicator">Chargement des récits...</div>
                 </div>
 
-                <!-- Vue immersive - Récit complet -->
+                <!-- Vue immersive améliorée -->
                 <div id="story-reader" class="story-reader" style="display: none;">
+                    <!-- Zone de clic pour fermer (arrière-plan) -->
+                    <div class="reader-backdrop"></div>
+                    
+                    <!-- Header fixe existant -->
                     <div class="reader-header">
-                        <button id="back-to-overview" class="back-btn">Retour à la liste</button>
+                        <button id="back-to-overview" class="back-btn">← Retour à la liste</button>
                         <div class="reader-navigation">
-                            <button id="prev-story" class="nav-btn">Précédent</button>
+                            <button id="prev-story" class="nav-btn">‹ Précédent</button>
                             <span id="story-counter">1 / 5</span>
-                            <button id="next-story" class="nav-btn">Suivant</button>
+                            <button id="next-story" class="nav-btn">Suivant ›</button>
                         </div>
                     </div>
+
+                    <!-- Contenu principal -->
                     <div id="current-story" class="current-story">
                         <!-- Le récit actuel sera injecté ici -->
+                    </div>
+
+                    <!-- Navigation flottante (apparaît au scroll) -->
+                    <div id="floating-nav" class="floating-navigation">
+                        <button id="floating-prev" class="floating-nav-btn" title="Récit précédent">‹</button>
+                        <button id="floating-back-top" class="floating-nav-btn" title="Retour en haut">↑</button>
+                        <button id="floating-next" class="floating-nav-btn" title="Récit suivant">›</button>
+                        <button id="floating-close" class="floating-nav-btn close" title="Fermer">×</button>
                     </div>
                 </div>
             </div>
