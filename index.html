@@ -24,9 +24,34 @@
     <main>
         <!-- Section Récits -->
         <section id="recits" class="tab-content active">
+            <!-- Filtres -->
+            <div class="story-filters">
+                <button class="filter-btn active" data-filter="all">Tous les récits</button>
+                <button class="filter-btn" data-filter="journal">Journal</button>
+                <button class="filter-btn" data-filter="oneshot">Récits</button>
+            </div>
+
             <div class="story-container">
-                <!-- Les récits seront injectés ici par JavaScript -->
-                <div id="loading-indicator">Chargement des récits...</div>
+                <!-- Vue d'ensemble - Liste compacte -->
+                <div id="story-overview" class="story-overview">
+                    <!-- Les aperçus seront injectés ici -->
+                    <div id="loading-indicator">Chargement des récits...</div>
+                </div>
+
+                <!-- Vue immersive - Récit complet -->
+                <div id="story-reader" class="story-reader" style="display: none;">
+                    <div class="reader-header">
+                        <button id="back-to-overview" class="back-btn">Retour à la liste</button>
+                        <div class="reader-navigation">
+                            <button id="prev-story" class="nav-btn">Précédent</button>
+                            <span id="story-counter">1 / 5</span>
+                            <button id="next-story" class="nav-btn">Suivant</button>
+                        </div>
+                    </div>
+                    <div id="current-story" class="current-story">
+                        <!-- Le récit actuel sera injecté ici -->
+                    </div>
+                </div>
             </div>
         </section>
 
